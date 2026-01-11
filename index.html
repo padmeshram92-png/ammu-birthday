@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Ammu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;900&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+    height:100vh;
+    background:radial-gradient(circle at top,#fff7fb,#f2bfd2,#c98fb3);
+    font-family:'Poppins',sans-serif;
+    overflow:hidden;
+}
+
+/* Overlay */
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.75);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:10;
+    cursor:pointer;
+}
+.overlay h1{
+    color:white;
+    font-family:'Playfair Display',serif;
+    text-align:center;
+    font-size:34px;
+    animation:pulse 2s infinite;
+}
+@keyframes pulse{
+    0%{opacity:.6}50%{opacity:1}100%{opacity:.6}
+}
+
+/* Pages */
+.page{
+    position:absolute;
+    inset:0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    opacity:0;
+    pointer-events:none;
+    transition:1s;
+}
+.page.active{
+    opacity:1;
+    pointer-events:auto;
+}
+
+/* Card */
+.card{
+    background:rgba(255,255,255,0.45);
+    backdrop-filter:blur(18px);
+    padding:55px;
+    border-radius:32px;
+    text-align:center;
+    box-shadow:0 35px 90px rgba(0,0,0,0.3);
+    max-width:520px;
+    animation:cardIn 2s ease;
+}
+@keyframes cardIn{
+    from{transform:scale(0.85);opacity:0}
+    to{transform:scale(1);opacity:1}
+}
+
+h1{
+    font-family:'Playfair Display',serif;
+    font-size:40px;
+    color:#5b1c3a;
+}
+h2{
+    margin-top:10px;
+    font-size:24px;
+    color:#7a2d4f;
+}
+
+p{
+    margin-top:16px;
+    font-size:15px;
+    line-height:1.8;
+    min-height:24px;
+}
+
+.date{margin-top:20px;letter-spacing:3px}
+
+/* Button */
+button{
+    margin-top:28px;
+    padding:14px 36px;
+    border:none;
+    border-radius:40px;
+    background:linear-gradient(135deg,#ff7aa8,#7fdcff);
+    color:white;
+    font-size:14px;
+    cursor:not-allowed;
+    opacity:0.4;
+    transition:.3s;
+}
+button.active{
+    cursor:pointer;
+    opacity:1;
+}
+button.active:hover{transform:translateY(-4px)}
+
+/* Butterflies */
+.butterfly{
+    position:absolute;
+    font-size:26px;
+    animation:fly 9s linear infinite;
+    pointer-events:none;
+}
+.blue{color:#4fc3ff}
+.pink{color:#ff5fa2}
+@keyframes fly{
+    from{transform:translateY(100vh);opacity:0}
+    to{transform:translateY(-10vh);opacity:1}
+}
+
+/* PHOTO SLIDESHOW */
+.slideshow{
+    margin-top:25px;
+    position:relative;
+    width:100%;
+    height:260px;
+    border-radius:20px;
+    overflow:hidden;
+    box-shadow:0 20px 50px rgba(0,0,0,0.3);
+}
+.slideshow img{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:0;
+    animation:fadeSlide 20s infinite;
+}
+.slideshow img:nth-child(1){animation-delay:0s}
+.slideshow img:nth-child(2){animation-delay:4s}
+.slideshow img:nth-child(3){animation-delay:8s}
+.slideshow img:nth-child(4){animation-delay:12s}
+.slideshow img:nth-child(5){animation-delay:16s}
+
+@keyframes fadeSlide{
+    0%{opacity:0}
+    10%{opacity:1}
+    30%{opacity:1}
+    40%{opacity:0}
+    100%{opacity:0}
+}
+</style>
+</head>
+
+<body>
+
+<audio id="song" src="song.mp3" preload="auto" loop playsinline ></audio>
+
+<div class="overlay" onclick="startShow()">
+    <h1>Tap Anywhere 💖<br>A Surprise Awaits</h1>
+</div>
+
+<!-- PAGE 1 -->
+<div class="page active" id="page1">
+    <div class="card">
+        <h1>Happy Birthday</h1>
+        <h2>HAMRUTHA 🦋</h2>
+
+        <p id="p1"></p>
+        <p id="p2"></p>
+
+        <div class="date">12 • 01 • 2026</div>
+
+        <button id="nextBtn" onclick="nextPage()">Next ➜</button>
+    </div>
+</div>
+
+<!-- PAGE 2 -->
+<div class="page" id="page2">
+    <div class="card">
+        <h1>For You 💖</h1>
+
+        <p id="p3"></p>
+        <p id="p4"></p>
+
+        <!-- PHOTO SLIDESHOW -->
+        <div class="slideshow">
+           <div class="slideshow">
+    <img src="image1.jpeg">
+    <img src="image2.jpeg">
+    <img src="image3.jpeg">
+    <img src="image4.jpeg">
+    <img src="image5.jpeg">
+</div>
+
+        </div>
+
+        <button class="active" onclick="alert('Happy Birthday Ammu 💖🦋')">
+            Smile 😊
+        </button>
+    </div>
+</div>
+
+<script>
+let started=false;
+
+function startShow(){
+    if(started) return;
+    started=true;
+
+    document.querySelector('.overlay').style.display="none";
+
+    let audio=document.getElementById("song");
+    audio.volume=1;
+    audio.muted=false;
+    audio.play().catch(()=>{});
+
+    startTyping();
+
+    // MANY butterflies
+    setInterval(()=>{
+        for(let i=0;i<4;i++){
+            let b=document.createElement("div");
+            b.className="butterfly "+(Math.random()>0.5?"blue":"pink");
+            b.innerHTML="🦋";
+            b.style.left=Math.random()*100+"vw";
+            document.body.appendChild(b);
+            setTimeout(()=>b.remove(),9000);
+        }
+    },450);
+}
+
+function typeText(el,text,speed,cb){
+    let i=0;
+    function run(){
+        if(i<text.length){
+            el.innerHTML+=text.charAt(i++);
+            setTimeout(run,speed);
+        }else if(cb) cb();
+    }
+    run();
+}
+
+function startTyping(){
+    typeText(p1,"To my dear friend Ammu, your smile makes everything brighter.",40,()=>{
+        typeText(p2,"Your presence turns ordinary moments into beautiful memories.",40,()=>{
+            nextBtn.classList.add("active");
+            nextBtn.style.cursor="pointer";
+        });
+    });
+}
+
+function nextPage(){
+    if(!nextBtn.classList.contains("active")) return;
+
+    page1.classList.remove("active");
+    page2.classList.add("active");
+
+    typeText(p3,"Thank you for being such a precious part of my life.",40,()=>{
+        typeText(p4,"These moments remind me how special you truly are 💖",40);
+    });
+}
+</script>
+
+</body>
+</html>
